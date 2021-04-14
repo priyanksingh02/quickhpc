@@ -1,26 +1,21 @@
 CC=gcc
 PROGRAM=quickhpc
-PAPI_DIR=./papi-5.4.1/src
-LIBS_STATIC=${PAPI_DIR}/libpapi.a
+PAPI_DIR=../papi
+PAPI_INSTALL=${PAPI_DIR}/src/install
+PAPI_SRC=${PAPI_DIR}/src
 OBJS=config.o
-EXTERNAL_OBJS=${PAPI_DIR}/testlib/do_loops.o \
-	 ${PAPI_DIR}/testlib/test_utils.o \
-	 ${PAPI_DIR}/testlib/dummy.o
-INC=-I${PAPI_DIR} -I${PAPI_DIR} -I${PAPI_DIR}/testlib
+INC=-I${PAPI_INSTALL}/include 
+LIB=-L${PAPI_INSTALL}/libs -lpapi
 
-
-all: config 
+all: config ${PROGRAM}.c
 	${CC} ${DEBUG_FLAG} ${INC} -g -Wall ${PROGRAM}.c \
-		${EXTERNAL_OBJS} \
-		${LIBS_STATIC} \
-		${OBJS} -o ../${PROGRAM}
+		${OBJS} -o ${PROGRAM} ${LIB}
 
-debug: CC += -D_DEBUG
-debug: all
-
-config:
+config: config.c
 	${CC} ${INC} -g -c config.c
 
+debug: DEBUG_FLAG += -D_DEBUG
+debug: all
+
 clean:
-	-rm ../${PROGRAM}
-	-rm ${OBJS}
+	-rm -f ${PROGRAM} ${OBJS}

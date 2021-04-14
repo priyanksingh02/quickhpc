@@ -1,7 +1,7 @@
 #ifndef _CONFIG_H
 #define _CONFIG_H
 
-#include "papi_test.h"
+#include "papi.h"
 
 #define bool int
 #define true 1
